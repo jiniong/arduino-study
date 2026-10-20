@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width">
+  <title>메시지 보내기</title>
+  <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+</head>
+<body style="background:#1a1a2e; color:white; text-align:center; padding:40px; font-family:sans-serif;">
+  <h2>커플 메시지</h2>
+  <input id="msg" type="text" placeholder="메시지 입력" style="font-size:20px; padding:10px; width:80%;">
+  <br><br>
+  <button onclick="send()" style="font-size:20px; padding:10px 30px;">보내기</button>
+  <p id="status">연결 중...</p>
+
+  <script>
+    var client = mqtt.connect('wss://broker.hivemq.com:8884/mqtt');
+
+    client.on('connect', function() {
+      document.getElementById('status').innerText = '연결됨!';
+    });
+
+    function send() {
+      var msg = document.getElementById('msg').value;
+      client.publish('couple/phone2device', msg);
+      document.getElementById('status').innerText = '보냄: ' + msg;
+      document.getElementById('msg').value = '';
+    }
+  </script>
+</body>
+</html>
